@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #1F2937;
+  }
+  
+  .scrollbar-hidden {
+    /* Firefox */
+    scrollbar-width: none; 
+    /* IE and Edge */
+    -ms-overflow-style: none; 
+  }
+  
+  .scrollbar-hidden::-webkit-scrollbar {
+    /* Chrome, Safari, and Brave */
+    display: none; 
+  }
