@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Bell, User, LogOut } from "lucide-react"; // icons from lucide-react
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/Logo.png";
 import { CiSearch } from "react-icons/ci";
 import { LuBell } from "react-icons/lu";
 import { IoIosArrowDown } from "react-icons/io";
