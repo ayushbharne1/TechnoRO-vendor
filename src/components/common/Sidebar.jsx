@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Package, Users, Database, BarChart2, Bell, MapPin } from "lucide-react";
+import { Home, Package, Users, Database, BarChart2, Bell, MapPin, ClipboardList } from "lucide-react";
 
 //#7EC1B1
 const Sidebar = () => {
@@ -17,6 +17,28 @@ const Sidebar = () => {
         >
           <Home className="h-5 w-5" /> Dashboard
         </NavLink>
+        <NavLink
+          to="/products"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
+              isActive ? "bg-[#7EC1B1] text-white" : ""
+            }`
+          }
+        >
+          <Package className="h-5 w-5" /> Product
+        </NavLink>
+
+        <NavLink
+          to="/leads"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
+              isActive ? "bg-[#7EC1B1] text-white" : ""
+            }`
+          }
+        >
+          <ClipboardList className="h-5 w-5" /> Lead Management
+        </NavLink>
+        
         
         <NavLink
           to="/city"
@@ -41,16 +63,7 @@ const Sidebar = () => {
         >
           <Package className="h-5 w-5" /> Services
         </NavLink>
-        <NavLink
-          to="/products"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
-              isActive ? "bg-[#7EC1B1] text-white" : ""
-            }`
-          }
-        >
-          <Package className="h-5 w-5" /> Products
-        </NavLink>
+        
 
         <h1 className="text-lg font-semibold text-gray-700 mt-4 ml-1">Users</h1>
 
@@ -73,18 +86,6 @@ const Sidebar = () => {
           }
         >
           <Users className="h-5 w-5" /> Engineers
-        </NavLink>
-
-
-        <NavLink
-          to="/leads"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
-              isActive ? "bg-[#7EC1B1] text-white" : ""
-            }`
-          }
-        >
-          <Package className="h-5 w-5" /> Leads
         </NavLink>
 
         

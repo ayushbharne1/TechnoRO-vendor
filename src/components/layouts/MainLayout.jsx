@@ -14,7 +14,7 @@ const MainLayout = () => {
         <div className="sticky top-0 h-[calc(100vh-64px)]">{/* Adjust height to navbar height if needed */}
           <Sidebar />
         </div>
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto p-4 bg-[#EBF2F1]">
           <Outlet />
         </main>
       </div>
