@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Dashboard from "../components/dashboard/Dashboard";
 
-import Engineers from "../pages/Engineers";
 import Inventory from "../pages/Inventory";
 import MainLayout from "../components/layouts/MainLayout";
 import City from "../pages/City";
@@ -17,6 +16,8 @@ import ProductDetail from "../pages/ProductPage/ProductDetail";
 import UpdateProduct from "../pages/ProductPage/UpdateProduct";
 import AddLead from "../pages/LeadManagement/AddLead";
 import ViewLead from "../pages/LeadManagement/ViewLead";
+import AssignLead from "../pages/LeadManagement/AssignLead";
+import Engineer from "../pages/EngineerManagement/Engineer";
 
 
 const AppRoutes = () => {
@@ -35,10 +36,12 @@ const AppRoutes = () => {
           <Route path="/Leads" element={<Leads />} />
           <Route path="/Leads/addlead" element={<AddLead />} />
           <Route path="/Leads/viewlead" element={<ViewLead />} />
+          <Route path="/Leads/assignlead" element={<AssignLead />} />
+
+          <Route path="/engineers" element={<Engineer />} />
           
           <Route path="/city" element={<City />} />
           
-          <Route path="/engineers" element={<Engineers />} />
           <Route path="/inventory" element={<Inventory />} />
           
           <Route path="/notifications" element={<Notifications/>} />

@@ -4,9 +4,9 @@ import { Home, Package, Users, Database, BarChart2, Bell, MapPin, ClipboardList 
 //#7EC1B1
 const Sidebar = () => {
   return (
-    <aside className="w-64 bg-white text-[#36a88e] h-full flex flex-col border-r-2 border-gray-400">
+    <aside className="w-69 bg-white text-[#36a88e] h-full flex flex-col border-r-2 border-gray-400">
       
-      <nav className="flex-1 p-4 space-y-3 text-xl  tracking-wide ">
+      <nav className="flex-1 p-4 space-y-3 text-medium  tracking-wide ">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
@@ -39,6 +39,17 @@ const Sidebar = () => {
           <ClipboardList className="h-5 w-5" /> Lead Management
         </NavLink>
         
+
+        <NavLink
+          to="/engineers"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
+              isActive ? "bg-[#7EC1B1] text-white" : ""
+            }`
+          }
+        >
+          <Users className="h-5 w-5 " />Engineer Management
+        </NavLink>
         
         <NavLink
           to="/city"
@@ -51,7 +62,6 @@ const Sidebar = () => {
           <MapPin className="h-5 w-5" /> City
         </NavLink>
 
-        <h1 className="text-lg font-semibold text-gray-700 mt-4 ml-1">Services & Products</h1>
 
         <NavLink
           to="/Services"
@@ -65,7 +75,6 @@ const Sidebar = () => {
         </NavLink>
         
 
-        <h1 className="text-lg font-semibold text-gray-700 mt-4 ml-1">Users</h1>
 
          <NavLink
           to="/customers"
@@ -77,16 +86,7 @@ const Sidebar = () => {
         >
           <Package className="h-5 w-5" /> Customer
         </NavLink>
-         <NavLink
-          to="/engineers"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
-              isActive ? "bg-[#7EC1B1] text-white" : ""
-            }`
-          }
-        >
-          <Users className="h-5 w-5" /> Engineers
-        </NavLink>
+
 
         
 

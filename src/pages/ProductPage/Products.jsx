@@ -131,7 +131,7 @@ const Products = () => {
               </div>
 
       <h1 className="text-lg font-semibold text-gray-800 mb-6">Product List</h1>
-      <hr className="border-gray-200 mb-6" />
+      <hr className="border-gray-400 mb-6" />
 
       {/* Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
@@ -157,7 +157,7 @@ const Products = () => {
             placeholder="Search"
             value={globalFilter ?? ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none"
+            className="w-full sm:w-64 px-5 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent"
           />
           <button
             onClick={() => Navigate("/products/addproduct")}
@@ -168,15 +168,15 @@ const Products = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-x-auto">
+      <div className="bg-white  border-b  border-gray-400 overflow-x-auto">
         <table className="min-w-full border-collapse text-sm">
-          <thead className="bg-gray-50 text-gray-600 font-medium">
+          <thead className="bg-gray-100 text-gray-900 font-medium ">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-left border-b border-gray-200"
+                    className="px-4 py-3 text-left border-b border-gray-400"
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
@@ -188,7 +188,7 @@ const Products = () => {
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-gray-100 hover:bg-gray-50 transition"
+                className="border-b border-gray-200 hover:bg-gray-50 transition"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-4 py-3">

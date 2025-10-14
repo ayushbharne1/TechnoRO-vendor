@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ChevronRight, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AddLead = () => {
+  const Navigate = useNavigate();
   const [formData, setFormData] = useState({
     customerName: '',
     address: '',
@@ -122,24 +124,24 @@ const AddLead = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white p-4 ">
+      <div className=" mx-auto">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-          <Home className="w-4 h-4" />
-          <ChevronRight className="w-4 h-4" />
-          <span className="font-medium">Lead Management</span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-blue-600">Add Lead</span>
+        <div className="flex items-center gap-2 text-sm text-gray-900 pb-3">
+          <Home className="w-4 h-4 cursor-pointer" />
+          <ChevronRight className="w-5 h-5 text-gray-400" />
+          <span onClick={()=> Navigate('/leads')} className="font-medium cursor-pointer">Lead Management</span>
+          <ChevronRight className="w-5 h-5 text-gray-400" />
+          <span className=" cursor-pointer">Add Lead</span>
         </div>
 
         {/* Form Container */}
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="border-b border-gray-200 px-6 py-4">
+        <div className="bg-white">
+          <div className="border-b border-gray-200  py-4">
             <h1 className="text-xl font-semibold text-gray-900">Add Leads</h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="pt-5 space-y-6">
             {/* Customer Name */}
             <div>
               <label htmlFor="customerName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -152,7 +154,7 @@ const AddLead = () => {
                 value={formData.customerName}
                 onChange={handleInputChange}
                 placeholder="Priya Sharma"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.customerName ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -173,7 +175,7 @@ const AddLead = () => {
                 value={formData.address}
                 onChange={handleInputChange}
                 placeholder="Maharashtra, India"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.address ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -194,7 +196,7 @@ const AddLead = () => {
                 value={formData.phoneNo}
                 onChange={handleInputChange}
                 placeholder="91+1258794560"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.phoneNo ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -215,7 +217,7 @@ const AddLead = () => {
                 value={formData.serviceType}
                 onChange={handleInputChange}
                 placeholder="Repair"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.serviceType ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -236,7 +238,7 @@ const AddLead = () => {
                 value={formData.productModel}
                 onChange={handleInputChange}
                 placeholder="MSF456"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.productModel ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -256,7 +258,7 @@ const AddLead = () => {
                 name="dateReceived"
                 value={formData.dateReceived}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
+                className={`w-full px-4 py-2.5 border focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition ${
                   errors.dateReceived ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -275,7 +277,7 @@ const AddLead = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition bg-white"
+                className="w-full px-4 py-2.5 border border-gray-300 focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent outline-none transition bg-white"
               >
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
@@ -285,18 +287,18 @@ const AddLead = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-4 pt-4 align-center justify-center">
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex-1 px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+                className=" w-36 py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 transition font-medium"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 px-6 py-2.5 bg-[#7EC1B1] text-white rounded-lg hover:bg-[#6db0a0] transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className=" w-36 py-2.5 bg-[#7EC1B1] text-white hover:bg-[#6db0a0] transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Adding...' : 'Add'}
               </button>

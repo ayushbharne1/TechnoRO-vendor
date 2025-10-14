@@ -71,14 +71,14 @@ const ViewLead = () => {
               <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
                 <button 
                   onClick={() => Navigate("/dashboard")}
-                  className="hover:text-gray-900 transition-colors"
+                  className="hover:text-gray-900 transition-colors cursor-pointer "
                 >
                   <Home size={16} />
                 </button>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
-                <button onClick={()=>{Navigate("/leads")}} className="text-gray-900 font-medium">Lead Management</button>
+                <button onClick={()=>{Navigate("/leads")}} className="text-gray-900 font-medium cursor-pointer">Lead Management</button>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
-                <button className="text-gray-900 font-medium">View Lead</button>
+                <button className="text-gray-900 font-medium cursor-pointer">View Lead</button>
               </div>
       {/* Title */}
       <h2 className="text-xl font-semibold text-gray-800 mb-2">Lead Details</h2>

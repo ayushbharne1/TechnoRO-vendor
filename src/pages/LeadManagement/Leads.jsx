@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { Eye, Pencil, ChevronDown, Search, Home, Edit, ChevronRight } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Eye, Edit, ChevronDown, Search, Home, ChevronRight } from 'lucide-react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  flexRender,
+} from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
 const Leads = () => {
   const Navigate = useNavigate();
-  const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
 
-  // Sample data - replace with API call
-  const [allLeads] = useState([
+  // Sample data
+  const [data] = useState([
     {
       id: 1,
       leadId: 'OD54487',
@@ -110,7 +116,6 @@ const Leads = () => {
       assignTo: 'NA',
       status: 'Pending'
     },
-    // Additional sample data for pagination demonstration
     {
       id: 11,
       leadId: 'OD54488',
@@ -163,106 +168,150 @@ const Leads = () => {
     }
   ]);
 
-  // Filter leads based on search query
-  const filteredLeads = allLeads.filter(lead => 
-    lead.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    lead.leadId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    lead.serviceType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    lead.productModel.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter data based on status
+  const filteredData = useMemo(() => {
+    if (statusFilter === 'All') return data;
+    return data.filter(lead => lead.status === statusFilter);
+  }, [data, statusFilter]);
+
+  // Define columns
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'id',
+        header: 'Sr.No.',
+        cell: ({ row }) => row.index + 1,
+        enableGlobalFilter: false,
+      },
+      {
+        accessorKey: 'leadId',
+        header: 'Lead ID',
+      },
+      {
+        accessorKey: 'customerName',
+        header: 'Customer Name',
+      },
+      {
+        accessorKey: 'serviceType',
+        header: 'Service Type',
+      },
+      {
+        accessorKey: 'productModel',
+        header: 'Product Model',
+      },
+      {
+        accessorKey: 'dateReceived',
+        header: 'Date Received',
+      },
+      {
+        accessorKey: 'assignTo',
+        header: 'Assign To',
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ getValue }) => {
+          const status = getValue();
+          return (
+            <span
+              className={`inline-block px-3 py-1 text-sm font-medium ${
+                status === 'Completed'
+                  ? 'text-green-500'
+                  : 'text-orange-500'
+              }`}
+            >
+              {status}
+            </span>
+          );
+        },
+      },
+      {
+        id: 'actions',
+        header: 'Action',
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleEdit(row.original.id)}
+              className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+              title="Edit"
+            >
+              <Edit size={18} className="text-gray-600" />
+            </button>
+            <button
+              onClick={() => handleView(row.original.id)}
+              className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+              title="View"
+            >
+              <Eye size={18} className="text-gray-600" />
+            </button>
+          </div>
+        ),
+        enableGlobalFilter: false,
+      },
+    ],
+    []
   );
 
-  // Calculate pagination
-  const totalEntries = filteredLeads.length;
-  const totalPages = Math.ceil(totalEntries / entriesPerPage);
-  const startIndex = (currentPage - 1) * entriesPerPage;
-  const endIndex = Math.min(startIndex + entriesPerPage, totalEntries);
-  const currentLeads = filteredLeads.slice(startIndex, endIndex);
-
-  // Reset to page 1 when search or entries per page changes
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, entriesPerPage]);
+  const table = useReactTable({
+    data: filteredData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
+  });
 
   const handleEdit = (leadId) => {
+    Navigate('assignlead');
     console.log('Edit lead:', leadId);
-    // Implement edit functionality or API call
   };
 
   const handleView = (leadId) => {
     Navigate('viewlead');
-    // console.log('View lead:', leadId);
-    // Implement view functionality or API call
+    // Implement navigation: Navigate('viewlead');
   };
 
   const handleAddLead = () => {
     Navigate('addlead');
-    // Implement add lead functionality or API call
-  };
-
-  // Generate page numbers for pagination
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxPagesToShow = 5;
-    
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push('...');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push('...');
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push('...');
-        pages.push(currentPage - 1);
-        pages.push(currentPage);
-        pages.push(currentPage + 1);
-        pages.push('...');
-        pages.push(totalPages);
-      }
-    }
-    
-    return pages;
+    // Implement navigation: Navigate('addlead');
   };
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white p-4">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
         <button 
-          onClick={() => console.log('Navigate to home')}
-          className="hover:text-gray-900 transition-colors"
+          onClick={() => Navigate('/dashboard')}
+          className="hover:text-gray-900 transition-colors cursor-pointer"
         >
           <Home size={16} />
         </button>
         <ChevronRight className="w-5 h-5 text-gray-400" />
-        <span className="text-gray-900 font-medium">Lead Management</span>
+        <span className="text-gray-900 font-medium cursor-pointer">Lead Management</span>
       </div>
 
       {/* Header */}
-      <h1 className="text-2xl font-semibold text-gray-900 mb-3">Lead Management</h1>
+      <h1 className="text-xl font-semibold text-gray-900 mb-3">Lead Management</h1>
 
-      <hr className="border-gray-300 mb-5" />
+      <hr className="border-gray-400 mb-5" />
 
-      {/* Controls Bar - Outside Table */}
+      {/* Controls Bar */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-700">Show</span>
           <div className="relative">
             <select
-              value={entriesPerPage}
-              onChange={(e) => setEntriesPerPage(Number(e.target.value))}
-              className="appearance-none bg-white border border-gray-300 rounded px-3 py-1.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              className="appearance-none bg-white border border-gray-300 rounded px-3 py-1.5 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent"
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -281,10 +330,24 @@ const Leads = () => {
             <input
               type="text"
               placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent w-64"
+              value={globalFilter ?? ''}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent w-64"
             />
+          </div>
+
+          {/* Status Filter */}
+          <div className="relative">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="appearance-none bg-white border border-gray-300 rounded px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#7EC1B1] focus:border-transparent"
+            >
+              <option value="All">All Status</option>
+              <option value="Completed">Completed</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
           </div>
 
           {/* Add Lead Button */}
@@ -298,69 +361,43 @@ const Leads = () => {
         </div>
       </div>
       
-      <div className="bg-white rounded-lg shadow-sm">
-
+      <div className="bg-white ">
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto border-b border-gray-400">
           <table className="w-full">
             <thead>
-              <tr className="border-b bg-gray-50 border-gray-200">
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Sr.No.</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Lead ID</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Customer Name</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Service Type</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Product Model</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Date Received</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Assign To</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Action</th>
-              </tr>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="border-b  bg-gray-100 border-gray-400">
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="px-4 py-3 text-left text-sm font-semibold text-gray-900"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
             </thead>
             <tbody>
-              {currentLeads.length > 0 ? (
-                currentLeads.map((lead, index) => (
-                  <tr key={lead.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-gray-700">{startIndex + index + 1}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.leadId}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.customerName}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.serviceType}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.productModel}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.dateReceived}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{lead.assignTo}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-block px-3 py-1 rounded text-xs font-medium ${
-                          lead.status === 'Completed'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-orange-100 text-orange-700'
-                        }`}
-                      >
-                        {lead.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleEdit(lead.id)}
-                          className="p-1.5 hover:bg-gray-100 rounded transition-colors"
-                          title="Edit"
-                        >
-                          <Edit size={18} className="text-gray-600" />
-                        </button>
-                        <button
-                          onClick={() => handleView(lead.id)}
-                          className="p-1.5 hover:bg-gray-100 rounded transition-colors"
-                          title="View"
-                        >
-                          <Eye size={18} className="text-gray-600" />
-                        </button>
-                      </div>
-                    </td>
+              {table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => (
+                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="px-4 py-3 text-sm text-gray-700">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="px-4 py-8 text-center text-sm text-gray-500">
+                  <td colSpan={columns.length} className="px-4 py-8 text-center text-sm text-gray-500">
                     No results found
                   </td>
                 </tr>
@@ -370,42 +407,43 @@ const Leads = () => {
         </div>
 
         {/* Pagination */}
-        <div className="p-4 flex items-center justify-between border-t border-gray-200">
+        <div className="p-4 flex items-center justify-between  border-gray-200">
           <div className="text-sm text-gray-600">
-            Showing {totalEntries > 0 ? startIndex + 1 : 0} to {endIndex} of {totalEntries} Entries
+            Showing {table.getFilteredRowModel().rows.length > 0 ? table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 : 0} to{' '}
+            {Math.min(
+              (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+              table.getFilteredRowModel().rows.length
+            )}{' '}
+            of {table.getFilteredRowModel().rows.length} Entries
           </div>
           
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
               className="px-3 py-1.5 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
             
-            {getPageNumbers().map((page, index) => (
-              page === '...' ? (
-                <span key={`ellipsis-${index}`} className="px-2 text-gray-500">...</span>
-              ) : (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1.5 text-sm rounded transition-colors ${
-                    currentPage === page
-                      ? 'text-white'
-                      : 'text-gray-600 border border-gray-300 hover:bg-gray-50'
-                  }`}
-                  style={currentPage === page ? { backgroundColor: '#7EC1B1' } : {}}
-                >
-                  {page}
-                </button>
-              )
+            {Array.from({ length: table.getPageCount() }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => table.setPageIndex(page - 1)}
+                className={`px-3 py-1.5 text-sm rounded transition-colors ${
+                  table.getState().pagination.pageIndex + 1 === page
+                    ? 'text-white'
+                    : 'text-gray-600 border border-gray-300 hover:bg-gray-50'
+                }`}
+                style={table.getState().pagination.pageIndex + 1 === page ? { backgroundColor: '#7EC1B1' } : {}}
+              >
+                {page}
+              </button>
             ))}
             
             <button
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages || totalPages === 0}
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
               className="px-3 py-1.5 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Next
