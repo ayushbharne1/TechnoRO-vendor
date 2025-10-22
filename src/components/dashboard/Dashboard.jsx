@@ -1,6 +1,7 @@
 import { ChevronRight, Home } from 'lucide-react';
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 
 
 const stats = [
@@ -11,24 +12,61 @@ const stats = [
   { title: "Total Engineers", value: 245, change: "+2%", icon: "/totalengineer.svg" },
   { title: "Total Product", value: 105, change: "+10%", icon: "/totalproduct.svg" },
 ];
+
+  // Data precisely matching the image chart pattern
   const data = [
-    { x: '5k', blue: 22, red: 26 },
-    { x: '10k', blue: 73, red: 35 },
-    { x: '15k', blue: 35, red: 40 },
-    { x: '20k', blue: 40, red: 47 },
-    { x: '25k', blue: 52, red: 55 },
-    { x: '30k', blue: 42, red: 35 },
-    { x: '35k', blue: 28, red: 93 },
-    { x: '40k', blue: 58, red: 42 },
-    { x: '45k', blue: 28, red: 68 },
-    { x: '50k', blue: 35, red: 45 },
-    { x: '55k', blue: 95, red: 59 },
-    { x: '60k', blue: 48, red: 22 }
+    { day: 1, Sales: 82, Profit: 80 },
+    { day: 2, Sales: 78, Profit: 76 },
+    { day: 3, Sales: 62, Profit: 58 },
+    { day: 4, Sales: 85, Profit: 80 },
+    { day: 5, Sales: 82, Profit: 75 },
+    { day: 6, Sales: 78, Profit: 68 },
+    { day: 7, Sales: 82, Profit: 78 },
+    { day: 8, Sales: 62, Profit: 58 },
+    { day: 9, Sales: 55, Profit: 40 },
+    { day: 10, Sales: 62, Profit: 60 },
+    { day: 11, Sales: 92, Profit: 82 },
+    { day: 12, Sales: 82, Profit: 58 },
+    { day: 13, Sales: 42, Profit: 42 },
+    { day: 14, Sales: 52, Profit: 48 },
+    { day: 15, Sales: 28, Profit: 22 },
+    { day: 16, Sales: 85, Profit: 22 },
+    { day: 17, Sales: 38, Profit: 32 },
+    { day: 18, Sales: 98, Profit: 82 },
+    { day: 19, Sales: 78, Profit: 75 },
+    { day: 20, Sales: 28, Profit: 25 },
+    { day: 21, Sales: 38, Profit: 32 },
+    { day: 22, Sales: 8, Profit: 40 },
+    { day: 23, Sales: 90, Profit: 88 },
+    { day: 24, Sales: 78, Profit: 75 },
+    { day: 25, Sales: 38, Profit: 35 },
+    { day: 26, Sales: 2, Profit: 2 },
+    { day: 27, Sales: 2, Profit: 2 },
+    { day: 28, Sales: 2, Profit: 2 },
+    { day: 29, Sales: 2, Profit: 2 },
+    { day: 30, Sales: 2, Profit: 2 },
+    { day: 31, Sales: 2, Profit: 2 },
   ];
 
+  const CustomLegend = () => (
+    <div className="flex justify-center items-center gap-6 mt-4">
+      <div className="flex items-center gap-2">
+        <div className="w-3 h-3 rounded-full bg-white border-2 border-blue-500"></div>
+        <span className="text-sm text-gray-600">Sales</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-3 h-3 rounded-full bg-white border-2 border-orange-400"></div>
+        <span className="text-sm text-gray-600">Profit</span>
+      </div>
+    </div>
+  );
+
 const Dashboard = () => {
+    const [year, setYear] = useState('2025');
+  const [month, setMonth] = useState('October');
+
   return (
-    <div className="bg-[#EBF2F1] min-h-full p-2 ">
+    <div className="bg-white min-h-full p-4">
       {/* Breadcrumb */}
               <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
                 <button 
@@ -50,7 +88,7 @@ const Dashboard = () => {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-white rounded-md px-6 py-8 flex items-center gap-4 border border-gray-100  transition"
+            className="bg-gray-100 rounded-md px-6 py-8 flex items-center gap-4 border border-gray-100  transition"
           >
             <div className="flex-shrink-0">
               <img src={stat.icon} alt={stat.title} className="w-10 h-10" />
@@ -63,52 +101,99 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <div className="w-full h-[70vh] bg-white p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-xl font-semibold text-gray-900">Reports</h1>
-        <select className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white">
-          <option>Daily</option>
-        </select>
+      <div className="w-full h-[70vh] bg-gray-100 rounded-lg p-4"> 
+      <div className="rounded-lg">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-3 ">
+          <h2 className="text-xl font-semibold text-gray-800">Revenue Summary</h2>
+          <div className="flex gap-3">
+            <select 
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+            </select>
+            <select 
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className='bg-white py-4'>
+          <ResponsiveContainer width="100%" height={400} className="">
+          <LineChart 
+            data={data}
+            margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+            <XAxis 
+              dataKey="day" 
+              stroke="#9ca3af"
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={{ stroke: '#e5e7eb' }}
+            />
+            <YAxis 
+              stroke="#9ca3af"
+              tick={{ fill: '#6b7280', fontSize: 12 }}
+              axisLine={{ stroke: '#e5e7eb' }}
+              tickFormatter={(value) => `${value}k`}
+              ticks={[0, 20, 40, 60, 80, 100]}
+            />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: 'white', 
+                border: '1px solid #e5e7eb',
+                borderRadius: '6px',
+                fontSize: '12px'
+              }}
+              formatter={(value) => `${value}k`}
+            />
+            <Line 
+              type="linear" 
+              dataKey="Sales" 
+              stroke="#6366f1" 
+              strokeWidth={2}
+              dot={{ fill: 'white', strokeWidth: 2, r: 4, stroke: '#6366f1' }}
+              activeDot={{ r: 6 }}
+            />
+            <Line 
+              type="linear" 
+              dataKey="Profit" 
+              stroke="#fb923c" 
+              strokeWidth={2}
+              dot={{ fill: 'white', strokeWidth: 2, r: 4, stroke: '#fb923c' }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+
+        {/* Custom Legend */}
+        <CustomLegend />
+        </div>
       </div>
-      
-      <div className="h-50">
-        <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="0" stroke="#f0f0f0" vertical={false} />
-          <XAxis 
-            dataKey="x" 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: '#999', fontSize: 12 }}
-            dy={10}
-          />
-          <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: '#999', fontSize: 12 }}
-            domain={[0, 100]}
-            ticks={[0, 20, 40, 60, 80, 100]}
-          />
-          <Line 
-            type="linear" 
-            dataKey="blue" 
-            stroke="#60a5fa" 
-            strokeWidth={2}
-            dot={false}
-          />
-          <Line 
-            type="linear" 
-            dataKey="red" 
-            stroke="#ef4444" 
-            strokeWidth={2}
-            dot={false}
-          />
-        </LineChart>
-              </ResponsiveContainer>
-      </div>
+    </div>
    
     </div>
-    </div>
+   
   );
 };
 

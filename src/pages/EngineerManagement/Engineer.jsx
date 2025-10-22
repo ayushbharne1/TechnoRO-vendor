@@ -1,53 +1,60 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, use } from 'react';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 import { Search, Plus, ChevronLeft, ChevronRight, Edit, Trash2, Eye, MoreVertical, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Engineer = () => {
+  const Navigate = useNavigate();
   const [data, setData] = useState([
     {
       srNo: 1,
       eid: '512',
       name: 'Raj Sharma',
+      skill: 'fitting, repairing',
       contact: '1278945620',
       area: 'Pune',
       performance: 3,
-      availability: 'Online'
+      availability: 'Available'
     },
     {
       srNo: 2,
       eid: '754',
       name: 'Raj Sharma',
+      skill: 'fitting, repairing',
       contact: '1278945620',
       area: 'Pune',
       performance: 3,
-      availability: 'On Leave'
+      availability: 'Busy'
     },
     {
       srNo: 3,
       eid: '856',
       name: 'Raj Sharma',
+      skill: 'fitting, repairing',
+      contact: '1278945620',
+      area: 'Pune',
+      performance: 3,
+      availability: 'Available'
+    },
+    {
+      srNo: 4,
+      eid: '456',
+      name: 'Raj Sharma',
+      skill: 'fitting, repairing',
       contact: '1278945620',
       area: 'Pune',
       performance: 3,
       availability: 'On Leave'
     },
     {
-      srNo: 4,
-      eid: '456',
-      name: 'Raj Sharma',
-      contact: '1278945620',
-      area: 'Pune',
-      performance: 3,
-      availability: 'On Duty'
-    },
-    {
       srNo: 5,
       eid: '874',
       name: 'Raj Sharma',
+      skill: 'fitting, repairing',
       contact: '1278945620',
       area: 'Pune',
       performance: 3,
-      availability: 'On Duty'
+      availability: 'Busy'
     }
   ]);
 
@@ -73,24 +80,7 @@ const Engineer = () => {
     );
   };
 
-  // Availability badge component
-  const AvailabilityBadge = ({ status }) => {
-    const statusConfig = {
-      Online: { color: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
-      'On Leave': { color: 'bg-red-100 text-red-800', dot: 'bg-red-500' },
-      'On Duty': { color: 'bg-blue-100 text-blue-800', dot: 'bg-blue-500' }
-    };
-
-    const config = statusConfig[status] || statusConfig.Online;
-
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.color} flex items-center gap-1`}>
-        <span className={`w-2 h-2 rounded-full ${config.dot}`}></span>
-        {status}
-      </span>
-    );
-  };
-
+  
   // Columns definition
   const columns = useMemo(
     () => [
@@ -114,13 +104,19 @@ const Engineer = () => {
         cell: info => info.getValue(),
       },
       {
+        accessorKey: 'skill',
+        header: 'Skill',
+        cell: info => info.getValue(),
+      },
+
+      {
         accessorKey: 'contact',
-        header: 'Contact',
+        header: 'Phone No.',
         cell: info => info.getValue(),
       },
       {
         accessorKey: 'area',
-        header: 'Area',
+        header: 'Assigned Area',
         cell: info => (
           <span className=" text-gray-700 text-sm">
             {info.getValue()}
@@ -135,7 +131,7 @@ const Engineer = () => {
       {
         accessorKey: 'availability',
         header: 'Availability',
-        cell: info => <span className={`${info.getValue() === 'Online' ? 'text-green-800' : info.getValue() === 'On Leave' ? 'text-red-800' : 'text-green-800' } `}>
+        cell: info => <span className={`${info.getValue() === 'Available' ? 'text-green-500' : info.getValue() === 'On Leave' ? 'text-red-500' : info.getValue() === 'Busy' ? 'text-blue-500' : '' } `}>
             {info.getValue()}
         </span>
       },
@@ -144,19 +140,20 @@ const Engineer = () => {
         header: 'Action',
         cell: () => (
           <div className="flex items-center space-x-2">
-            <button className=" text-gray-600  rounded transition-colors">
+            <button 
+            onClick={()=> Navigate('/engineers/view')}
+            className=" text-blue-600  rounded transition-colors">
               <Eye size={16} />
             </button>
-            <button className=" text-gray-600  rounded transition-colors">
+            <button
+              onClick={() => Navigate("/engineers/update")}
+             className=" text-blue-600  rounded transition-colors">
               <Edit size={16} />
             </button>
             <button className="  text-red-700 hover:bg-red-50 rounded transition-colors">
               <Trash2 size={16} />
             </button>
             
-            <button className="  px-1 py-0.5 rounded-lg text-sm border border-red-800 text-red-800 transition-colors flex items-center gap-1">
-              Assign
-            </button>
           </div>
         ),
       },
@@ -270,8 +267,9 @@ const Engineer = () => {
               />
             </div>
             
-            <button className="bg-[#61ae9c] text-white px-3 py-1 rounded-lg hover:bg-[#36a88e] transition-colors flex items-center justify-center gap-2">
-            
+            <button 
+            onClick={()=> Navigate('/engineers/addengineer')}
+            className="bg-[#61ae9c] text-white px-3 py-1 rounded-lg hover:bg-[#36a88e] transition-colors flex items-center justify-center gap-2">
               Add Service Engineers
             </button>
           </div>

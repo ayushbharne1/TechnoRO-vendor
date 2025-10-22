@@ -18,6 +18,9 @@ import AddLead from "../pages/LeadManagement/AddLead";
 import ViewLead from "../pages/LeadManagement/ViewLead";
 import AssignLead from "../pages/LeadManagement/AssignLead";
 import Engineer from "../pages/EngineerManagement/Engineer";
+import AddEngineer from "../pages/EngineerManagement/AddEngineer";
+import UpdateEngineer from "../pages/EngineerManagement/UpdateEngineer";
+import ViewEngineer from "../pages/EngineerManagement/ViewEngineer";
 
 
 const AppRoutes = () => {
@@ -26,7 +29,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Protected Routes with Layout */}
         <Route path="/" element={<MainLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
 
           <Route path="/products" element={<Products />} />
           <Route path="products/addproduct" element={<AddProduct />} />
@@ -39,6 +42,9 @@ const AppRoutes = () => {
           <Route path="/Leads/assignlead" element={<AssignLead />} />
 
           <Route path="/engineers" element={<Engineer />} />
+          <Route path="/engineers/addengineer" element={<AddEngineer />} />
+          <Route path="/engineers/update" element={<UpdateEngineer />} />
+          <Route path="/engineers/view" element={<ViewEngineer />} />
           
           <Route path="/city" element={<City />} />
           

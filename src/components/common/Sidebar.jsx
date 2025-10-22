@@ -8,7 +8,7 @@ const Sidebar = () => {
       
       <nav className="flex-1 p-4 space-y-3 text-medium  tracking-wide ">
         <NavLink
-          to="/dashboard"
+          to="/"
           className={({ isActive }) =>
             `flex items-center gap-3  px-3 py-2 rounded-md hover:bg-[#7EC1B1] hover:text-white ${
               isActive ? "bg-[#7EC1B1] text-white" : ""

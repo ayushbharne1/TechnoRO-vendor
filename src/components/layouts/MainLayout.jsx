@@ -1,10 +1,24 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../common/Navbar";
 import Sidebar from "../common/Sidebar";
+import LoadingPage from "../../pages/LoadingPage";
+import { useEffect, useState } from "react";
 
 
 
 const MainLayout = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a loading delay (e.g., fetching data)
+    const timer = setTimeout(() => setLoading(false), 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <LoadingPage />; //No layout applied here
+  }
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       <div className="sticky top-0 z-50">
